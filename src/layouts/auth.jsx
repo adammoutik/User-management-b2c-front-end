@@ -4,6 +4,7 @@ import {
   UserIcon,
   UserPlusIcon,
   ArrowRightOnRectangleIcon,
+  UsersIcon,
 } from "@heroicons/react/24/solid";
 import { Navbar, Footer } from "@/widgets/layout";
 import routes from "@/routes";
@@ -30,6 +31,11 @@ export function Auth() {
       path: "/auth/sign-in",
       icon: ArrowRightOnRectangleIcon,
     },
+    {
+      name: "users",
+      path: "/dashboard/users",
+      icon: UsersIcon,
+    }
   ];
 
   return (
