@@ -1,3 +1,4 @@
+import React from "react";
 import { Routes, Route } from "react-router-dom";
 import { Cog6ToothIcon } from "@heroicons/react/24/solid";
 import { IconButton } from "@material-tailwind/react";
@@ -9,6 +10,7 @@ import {
 } from "@/widgets/layout";
 import routes from "@/routes";
 import { useMaterialTailwindController, setOpenConfigurator } from "@/context";
+import ProtectedRoute from "@/utils/ProtectedRoute";
 
 export function Dashboard() {
   const [controller, dispatch] = useMaterialTailwindController();
@@ -39,7 +41,17 @@ export function Dashboard() {
             ({ layout, pages }) =>
               layout === "dashboard" &&
               pages.map(({ path, element }) => (
-                <Route exact path={path} element={element} />
+                <Route
+                  key={path}
+                  path={path}
+                  element={
+                    ["/users", "/customers", "/profile"].includes(path) ? (
+                      <ProtectedRoute>{element}</ProtectedRoute>
+                    ) : (
+                      element
+                    )
+                  }
+                />
               ))
           )}
         </Routes>

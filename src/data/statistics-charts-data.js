@@ -1,4 +1,19 @@
 import { chartsConfig } from "@/configs";
+import { getByType, getPast12MonthsCustomers } from "@/services/customer.service";
+
+const past12customers = await getPast12MonthsCustomers();
+const usersCount = []
+const monthsyears = []
+past12customers.map((item) => {usersCount.unshift(item.totalUsers);monthsyears.unshift(`${item.month}-${item.year}`)})
+
+const bytype = await getByType();
+console.log("bytype :",bytype);
+
+const types = []
+const typesCount = []
+
+bytype.filter((item) => item._id != null).map((item) => {types.unshift(item._id);typesCount.unshift(item.totalUsers)})
+
 
 const websiteViewsChart = {
   type: "bar",
@@ -6,7 +21,7 @@ const websiteViewsChart = {
   series: [
     {
       name: "Views",
-      data: [50, 20, 10, 22, 50, 10, 40],
+      data: typesCount,
     },
   ],
   options: {
@@ -20,7 +35,7 @@ const websiteViewsChart = {
     },
     xaxis: {
       ...chartsConfig.xaxis,
-      categories: ["M", "T", "W", "T", "F", "S", "S"],
+      categories: types,
     },
   },
 };
@@ -30,8 +45,8 @@ const dailySalesChart = {
   height: 220,
   series: [
     {
-      name: "Sales",
-      data: [50, 40, 300, 320, 500, 350, 200, 230, 500],
+      name: "Users",
+      data: usersCount,
     },
   ],
   options: {
@@ -45,17 +60,7 @@ const dailySalesChart = {
     },
     xaxis: {
       ...chartsConfig.xaxis,
-      categories: [
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ],
+      categories: monthsyears,
     },
   },
 };
@@ -80,17 +85,7 @@ const completedTaskChart = {
     },
     xaxis: {
       ...chartsConfig.xaxis,
-      categories: [
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ],
+      categories:types,
     },
   },
 };
@@ -99,7 +94,7 @@ const completedTasksChart = {
   series: [
     {
       name: "Tasks",
-      data: [50, 40, 300, 220, 500, 250, 400, 230, 500],
+      data: typesCount,
     },
   ],
 };
@@ -107,22 +102,22 @@ const completedTasksChart = {
 export const statisticsChartsData = [
   {
     color: "white",
-    title: "Website View",
-    description: "Last Campaign Performance",
-    footer: "campaign sent 2 days ago",
+    title: "Daily Signups",
+    description: "",
+    footer: "Updated 20 minutes ago",
     chart: websiteViewsChart,
   },
   {
     color: "white",
-    title: "Daily Sales",
-    description: "15% increase in today sales",
+    title: "Monthly signups",
+    description: "",
     footer: "updated 4 min ago",
     chart: dailySalesChart,
   },
   {
     color: "white",
     title: "Completed Tasks",
-    description: "Last Campaign Performance",
+    description: "",
     footer: "just updated",
     chart: completedTasksChart,
   },

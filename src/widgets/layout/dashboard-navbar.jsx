@@ -25,12 +25,27 @@ import {
   setOpenConfigurator,
   setOpenSidenav,
 } from "@/context";
+import React from "react";
+import extractAndDecodeToken, { removeToken } from "@/services/auth.service";
 
 export function DashboardNavbar() {
   const [controller, dispatch] = useMaterialTailwindController();
   const { fixedNavbar, openSidenav } = controller;
   const { pathname } = useLocation();
   const [layout, page] = pathname.split("/").filter((el) => el !== "");
+  const [user, setUser] = React.useState(null);
+
+  React.useEffect(() => {
+    const decodedToken = extractAndDecodeToken();
+    if (decodedToken) {
+      setUser(decodedToken.user);
+    }
+  }, []);
+
+  const handleLogout = () => {
+    removeToken();
+    navigate('/login');
+  };
 
   return (
     <Navbar
@@ -83,7 +98,7 @@ export function DashboardNavbar() {
           >
             <Bars3Icon strokeWidth={3} className="h-6 w-6 text-blue-gray-500" />
           </IconButton>
-          <Link to="/auth/sign-in">
+         {!user ?( <Link to="/auth/sign-in">
             <Button
               variant="text"
               color="blue-gray"
@@ -99,7 +114,9 @@ export function DashboardNavbar() {
             >
               <UserCircleIcon className="h-5 w-5 text-blue-gray-500" />
             </IconButton>
-          </Link>
+          </Link>) : (<div className="flex w-max gap-4"><Link onClick={handleLogout} >
+      <Button  variant="filled">logout</Button></Link>
+    </div>)}
           <Menu>
             <MenuHandler>
               <IconButton variant="text" color="blue-gray">

@@ -8,6 +8,8 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { useMaterialTailwindController, setOpenSidenav } from "@/context";
+import { useEffect, useState } from "react";
+import extractAndDecodeToken from "@/services/auth.service";
 
 export function Sidenav({ brandImg, brandName, routes }) {
   const [controller, dispatch] = useMaterialTailwindController();
@@ -17,6 +19,16 @@ export function Sidenav({ brandImg, brandName, routes }) {
     white: "bg-white shadow-sm",
     transparent: "bg-transparent",
   };
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const decodedToken = extractAndDecodeToken();
+    if (decodedToken) {
+      setUser(decodedToken.user);
+    }
+  }, []);
+
+
 
   return (
     <aside
@@ -27,12 +39,13 @@ export function Sidenav({ brandImg, brandName, routes }) {
       <div
         className={`relative`}
       >
-        <Link to="/" className="py-6 px-8 text-center">
+        <Link to="/dashboard/home" className="py-6 px-8 text-center">
           <Typography
             variant="h6"
             color={sidenavType === "dark" ? "white" : "blue-gray"}
+            className="font-monospace"
           >
-            {brandName}
+            ONEE-UM
           </Typography>
         </Link>
         <IconButton
@@ -47,7 +60,7 @@ export function Sidenav({ brandImg, brandName, routes }) {
         </IconButton>
       </div>
       <div className="m-4">
-        {routes.map(({ layout, title, pages }, key) => (
+        {routes.filter((elem) => (elem.layout != "auth")).map(({ layout, title, pages }, key) => (
           <ul key={key} className="mb-4 flex flex-col gap-1">
             {title && (
               <li className="mx-3.5 mt-4 mb-2">
@@ -60,7 +73,7 @@ export function Sidenav({ brandImg, brandName, routes }) {
                 </Typography>
               </li>
             )}
-            {pages.map(({ icon, name, path }) => (
+            {pages.filter((elem) => user ? user.role == "Admin" ? elem.name != "users": true : true).map(({ icon, name, path }) => (
               <li key={name}>
                 <NavLink to={`/${layout}${path}`}>
                   {({ isActive }) => (

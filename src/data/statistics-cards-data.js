@@ -1,3 +1,4 @@
+import { getLastMonthUsersCount, getLastYearUsersCount, getThisYearUsersCount } from "@/services/customer.service";
 import {
   BanknotesIcon,
   UserPlusIcon,
@@ -5,12 +6,19 @@ import {
   ChartBarIcon,
 } from "@heroicons/react/24/solid";
 
+
+const lastYear = await getLastYearUsersCount();
+console.log(lastYear)
+const thisYear = await getThisYearUsersCount();
+console.log(thisYear)
+const lastMonth = await getLastMonthUsersCount();
+
 export const statisticsCardsData = [
   {
     color: "gray",
     icon: BanknotesIcon,
-    title: "Today's Money",
-    value: "$53k",
+    title: "Last Month",
+    value: lastMonth[0].totalUsers,
     footer: {
       color: "text-green-500",
       value: "+55%",
@@ -20,8 +28,8 @@ export const statisticsCardsData = [
   {
     color: "gray",
     icon: UsersIcon,
-    title: "Today's Users",
-    value: "2,300",
+    title: "This Year",
+    value: thisYear[0].totalUsers,
     footer: {
       color: "text-green-500",
       value: "+3%",
@@ -31,25 +39,15 @@ export const statisticsCardsData = [
   {
     color: "gray",
     icon: UserPlusIcon,
-    title: "New Clients",
-    value: "3,462",
+    title: "Last Year",
+    value: lastYear[0].totalUsers,
     footer: {
       color: "text-red-500",
       value: "-2%",
       label: "than yesterday",
     },
   },
-  {
-    color: "gray",
-    icon: ChartBarIcon,
-    title: "Sales",
-    value: "$103,430",
-    footer: {
-      color: "text-green-500",
-      value: "+5%",
-      label: "than yesterday",
-    },
-  },
+  
 ];
 
 export default statisticsCardsData;

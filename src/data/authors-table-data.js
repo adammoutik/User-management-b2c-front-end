@@ -1,39 +1,3 @@
-import axios from "axios";
-
-
-const base_url = 'http://localhost:3000/'
-
-
-// axios.get(`${base_url}/user`)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 export const authorsTableData = [
   {
     img: "/img/team-2.jpeg",
